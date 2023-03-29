@@ -2,26 +2,25 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-export default function NewRoomForm(props) {
-  const { addRoom } = props;
-  const [name, setName] = useState("");
-  const [area, setArea] = useState("");
-
-  // Only accept numeric characters.
-  const handleAreaInput = (e) => {
-    const int = parseInt(e.target.value, 10);
-    setArea(int >= 0 ? int : "");
-  };
+export default function UpdateRoomForm(props) {
+  const { oldName, oldArea, changeRoom } = props;
+  const [name, setName] = useState(oldName);
+  const [area, setArea] = useState(oldArea);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (name && area) {
-      addRoom({ name, area });
+      changeRoom(name, area);      
       setName("");
-      setArea("");
+      setArea("");      
     } else {
       alert("Invalid room data.");
     }
+  };
+
+  const handleAreaInput = (e) => {
+    const int = parseInt(e.target.value, 10);
+    setArea(int >= 0 ? int : "");
   };
 
   return (
@@ -29,9 +28,6 @@ export default function NewRoomForm(props) {
       <Form.Group>
         <div className="container">
           <div className="row">
-            <div className="col-sm text-end mt-2">
-              <h6>New Room:</h6>
-            </div>
             <div className="col-sm">
               <Form.Control
                 type="text"
@@ -48,9 +44,9 @@ export default function NewRoomForm(props) {
                 value={area}
               />
             </div>
-            <div className="col-sm-1 mt-1 me-2">
-              <Button type="submit" className="btn-sm" title="Add new room.">
-                Add
+            <div className="col-sm mt-1">
+              <Button type="submit" className="btn-sm">
+                Update
               </Button>
             </div>
           </div>

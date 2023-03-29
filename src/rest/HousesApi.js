@@ -8,7 +8,7 @@ class HousesApi {
       const data = await resp.json();
       return data;
     } catch (e) {
-      console.log("Error occurred in HousesApi's get method.", e);
+      console.log("Error occurred in HousesApi get method.", e);
     }
   };
 
@@ -24,7 +24,7 @@ class HousesApi {
       return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in HousesApi's put method.", e);
+      console.log("Error occurred in HousesApi put method.", e);
     }
   };
 
@@ -40,7 +40,7 @@ class HousesApi {
       return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in HousesApi's post method.", e);
+      console.log("Error occurred in HousesApi post method.", e);
     }
   }; 
   
@@ -52,10 +52,10 @@ class HousesApi {
           "Content-Type": "application/json",
         }
       });
-      //return await resp.json();
+      return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in HousesApi's delete method.", e);
+      console.log("Error occurred in HousesApi delete method.", e);
     }
   };
 

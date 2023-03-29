@@ -1,21 +1,24 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import House from "./House";
 import NewHouseForm from "./NewHouseForm";
 import { housesApi } from "../rest/HousesApi.js";
 
-export class HousesList extends React.Component {
-  state = {
-    houses: [],
-  };
+export default function HousesList() {
 
-  componentDidMount() {
-    this.fetchHouses();
-  }
+  const [houses, setHouses] = useState([]);
 
-  // get (Read)
-  fetchHouses = async () => {
-    const houses = await housesApi.get();
+  // When page first loads, load the data
+  // into our state object and render the page.
+  useEffect(() => {
+    fetchHouses();
+  }, []);
 
+  // READ all houses, sort them in reverse order by id
+  // so we see our newly created houses at the top of the 
+  // page, and set the state, triggering React to render the page.
+  const fetchHouses = async () => {
+   
+    const newHouses = await housesApi.get();
     function compareFn(a, b) {
       if (a._id > b._id) {
         return -1;
@@ -26,51 +29,53 @@ export class HousesList extends React.Component {
       // a must be equal to b
       return 0;
     }
-    houses.sort(compareFn);
-
-    this.setState({ houses });
+    newHouses.sort(compareFn);
+    setHouses(newHouses);
   };
 
-  // put (Update)
-  updateHouse = async (updatedHouse) => {
-    await housesApi.put(updatedHouse);
-    this.fetchHouses();
+  // UPDATE an individual house in the database
+  // and refresh the page.
+  const updateHouse = async (updatedHouse) => {
+    await housesApi.put(updatedHouse); 
+    fetchHouses();
   };
 
-  // post (Create)
-  addHouse = async (house) => {
+  // CREATE an individual house in the database
+  // and refresh the page.
+  const addHouse = async (house) => {
     await housesApi.post(house);
-    this.fetchHouses();
+    fetchHouses();
   };
 
-  // delete (Delete)
-  deleteHouse = async (id) => {
+  // DELETE an individual house in the database
+  // and refresh the page.
+  const deleteHouse = async (id) => {
     await housesApi.delete(id);
-    this.fetchHouses();
+    fetchHouses();
   };
 
-  render() {
-    return (
-      <div className="container">
-        <div className="row mt-2">
-          <div className="col-sm-6  ">
-            <h1>House List</h1>
-          </div>
-          <div className="col-sm-6 d-flex flex-row-reverse">
-            <NewHouseForm addHouse={this.addHouse} />
-          </div>
+  return (
+    <div className="container">
+      <div className="row mt-2">
+        <div className="col-sm">
+          <h1>House List</h1>
         </div>
-        <div className="row">
-          {this.state.houses.map((house) => (
-            <House
-              key={house._id}
-              house={house}
-              updateHouse={this.updateHouse}
-              deleteHouse={this.deleteHouse}
-            />
-          ))}
+        <div className="col-sm-8 d-flex flex-row-reverse">
+          <NewHouseForm
+            addHouse={addHouse}
+          />
         </div>
       </div>
-    );
-  }
+      <div className="row">
+        {houses.map((house, index) => (
+          <House
+            key={index}
+            house={house}
+            updateHouse={updateHouse}
+            deleteHouse={deleteHouse}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }

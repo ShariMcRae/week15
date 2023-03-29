@@ -1,57 +1,61 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
+import RoomList from "./RoomList";
 import NewRoomForm from "./NewRoomForm";
+import UpdateHouseForm from "./UpdateHouseForm";
+import "./House.css";
 
 export default function House(props) {
-
   const { house, updateHouse, deleteHouse } = props;
+  const [showEditForm, setShowEditForm] = useState(false);
 
-  const deleteRoom = (roomId) => {
-    const updatedHouse = {
-      ...house,
-      rooms: house.rooms.filter((x) => x._id !== roomId),
-    };
-    updateHouse(updatedHouse);
+  const addRoom = (room) => {
+    updateHouse({ ...house, rooms: [...house.rooms, room] });
   };
 
-  const addNewRoom = (room) => {
-    return updateHouse({ ...house, rooms: [...house.rooms, room] });
+  const changeHouseName = (newName) => {
+    const newHouse = { ...house, name: newName };
+    updateHouse(newHouse);
+    setShowEditForm(false);
   };
-
-  const rooms = () => (
-    <>
-      {house.rooms.map((room) => (
-        <Card.Text>
-          <Button className="btn-sm mx-3" onClick={(e) => deleteRoom(room._id)}>
-            𐌢
-          </Button>
-          <b>Room:</b> {`${room.name} (${room.area} Sq Ft.)`}
-        </Card.Text>
-      ))}
-    </>
-  );
 
   return (
     <CardGroup>
-      <Card bg="light" key="{house._id}" text="dark" className="mt-3">
+      <Card bg="light" text="dark" className="mt-4">
         <Card.Header className="pt-3">
-          <h4>
-            <Button
-              className="btn-sm me-3 "
-              onClick={(e) => deleteHouse(house._id)}>
-              𐌢
-            </Button>
-            <b>House:</b> {house.name}
-          </h4>
+          <h5>
+            {!showEditForm && (
+              <div>
+                <Button
+                  className="btn-sm me-1 pt-0 pb-0"
+                  title="Delete House"
+                  onClick={(e) => deleteHouse(house._id)}
+                >
+                  𐌢
+                </Button>
+                <Button
+                  className="btn-sm me-3 px-1 py-0"
+                  title="Edit House"
+                  onClick={(e) => setShowEditForm(true)}
+                >
+                  ✎
+                </Button>
+                {house.name}
+              </div>
+            )}
+            {showEditForm && (
+              <UpdateHouseForm
+                oldName={house.name}
+                changeHouseName={changeHouseName}
+              />
+            )}
+          </h5>
         </Card.Header>
-        <Card.Body>
-          <Card.Text>
-            {rooms()}
-          </Card.Text>
-        </Card.Body>
+        <RoomList house={house} updateHouse={updateHouse}/>  
         <Card.Footer>
-          <NewRoomForm addNewRoom={addNewRoom} />
+          <NewRoomForm addRoom={addRoom} />
         </Card.Footer>
       </Card>
     </CardGroup>

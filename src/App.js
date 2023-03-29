@@ -1,4 +1,4 @@
-import {HousesList} from './components/HousesList';
+import HousesList from './components/HousesList';
 
 export default function App() {
 
