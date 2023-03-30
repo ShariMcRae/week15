@@ -23,7 +23,7 @@ export default function House(props) {
 
   return (
     <CardGroup>
-      <Card bg="light" text="dark" className="mt-4">
+      <Card bg="light" text="dark" className="mt-3">
         <Card.Header className="pt-3">
           <h5>
             {!showEditForm && (
@@ -54,7 +54,7 @@ export default function House(props) {
           </h5>
         </Card.Header>
         <RoomList house={house} updateHouse={updateHouse}/>  
-        <Card.Footer>
+        <Card.Footer className="d-flex flex-row-reverse">
           <NewRoomForm addRoom={addRoom} />
         </Card.Footer>
       </Card>
