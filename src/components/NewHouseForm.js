@@ -25,7 +25,7 @@ export default function NewHouseForm(props) {
               <h5>New House:</h5>
             </div>
             <div className="col-sm">
-              <Form.Control
+             <Form.Control
                 type="text"
                 placeholder="House Name"
                 onChange={(e) => setName(e.target.value)}
